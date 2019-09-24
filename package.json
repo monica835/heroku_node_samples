@@ -15,5 +15,8 @@
     "url": "https://github.com/monica835/heroku_node_samples/issues"
   },
   "homepage": "https://github.com/monica835/heroku_node_samples#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "^4.17.1"
+    }
 }
