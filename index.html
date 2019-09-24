@@ -1,9 +1,199 @@
 <!Doctype html>
 <html>
     <head>
-        <title>Heroku Sample</title>
-    </head>
-    <body>
-        <h1>Hello World</h1>
+        <meta http-equiv="Content-Type" const="text/html;charset=UTF-8" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ'
+          crossorigin='anonymous'>
+         
+          <title>Online Chat</title>
+        <div class="jumbotron">
+          <center>
+            <i class='fab fa-facebook-messenger' style='font-size: 70px;color:royalblue'>
+              <h1 style="color:white">SOCKET.IO CHAT</h1>
+            </i>
+          </center>
+        </div>
+      </head>
+      
+      <style>
+        h1{
+        font-size: 50px;
+        color: black;
+        
+      }
+      .jumbotron{
+        padding: 20px;
+        color:black;
+        background-color: pink;
+        background-repeat: no-repeat;
+        background-size: 100%;
+        background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlTBdNfwLbsy3A7NXyDdHnD7foNbdFcrEOQRD7WWOR-OSSwTsU');
+      }
+      .card{
+        border:2px solid black;
+        width: 500px;
+        background-image: url();
+      }
+      .form-control{
+        width:300px;
+        
+      }
+      
+      .right{
+        float: right;
+        border: 1px solid black;
+        border-radius: 7px;
+        background-color: aqua
+        
+      }
+      
+      .left{
+        float: left;
+        border: 1px solid black;
+        border-radius: 7px;
+        background-color:yellow
+      }
+      .form-control-send{
+        margin-left: 265px;
+          height: 41px;
+          width: 416px;
+      
+      }
+      #btnMessage{
+        margin-left: -2px;
+      }
+      
+      </style>
+      
+      <body>
+         
+        <center>
+      
+          <div id ="intro" class="card-user" style="margin-right:-5%;background-color: cornsilk;width: 500px; border-radius: 10px; border:2px solid black;">
+            <br>
+            <div id="change_username" class="form-group">
+              <input id="username" type="text" class="form-control" placeholder="username" />
+              <br>
+              <button id="btnUsername" class="btn btn-outline-primary" type="button" >USERNAME</button>
+            </div>
+            <br>
+            <br>
+          </div>
+      
+        </center>
+        <div id="home" style="display:none">
+        <div id="active_user" style="margin-top:3%; border:2px solid black;width: 300px; text-align: center;position:fixed; background-color:darkkhaki;border-radius: 13px; ">
+          <p style="color: black ; font-family: Verdana, Geneva, Tahoma, sans-serif" class='	fas fa-user-alt'>
+            &nbsp;&nbsp;Online Users:</p>
+          <ul id="online_list"></ul>
+        </div>
+      
+        <br>
+        <center>
+          <div class="card" style="margin-right:-20%;border-radius:10px;">
+            <header style="background-color:cornflowerblue; height:50px;border-radius:10px;">
+              <h1 style="font-size:30px; " class="fa fa-envelope-open-o">Message Box</h1>
+            </header>
+      
+            <ul id="newmessage"></ul>
+            <section id="messagebox">
+              <hr>
+              <section id="feedback"></section>
+            </section>
+          </div>
+          <br>
+          <section id="input_zone">
+            <input id="message" placeholder="messages" class="form-control-send" type="text" style="border-radius:10px; border-color:red; padding: 7px 0; border-bottom: 1px solid #ccc" />
+            <button id="btnMessage" class="btn btn-outline-danger " type="button">SEND</button>
+          </section>
+      
+          </div>
+          </div>
+        </center>
+        </center><br><br>
+      </div>
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script src="app.js"></script>
+        <script>
+          $(function () {
+            var socket = io.connect('http://localhost:8080')
+      
+            var message = $("#message")
+            var username = $("#username")
+            var btnMessage = $("#btnMessage")
+            var btnUsername = $("#btnUsername")
+            var messagebox = $("#messagebox")
+            var feedback = $("#feedback")
+      
+      
+          $(document).ready(function(){
+          $("#btnUsername").click(function(){
+          alert("You are now active..");
+          $("#home").show();
+          $("#intro").hide();
+      
+            });
+      });
+            //creating message
+            btnMessage.click(function () {
+              socket.emit('new_message', {
+                message: message.val()
+              })
+            })
+      
+            //appending a new_message
+            socket.on("new_message", (data) => {
+              feedback.html('');
+              message.val('');
+              if (data.username == $('#username').val()) {
+                messagebox.append($('<p class="right" style=" color:red; margin-left: 50% "</p>').text(data.username + " : " + data.message));
+              } else {
+                messagebox.append($('<p class="left" style=" color:blue;  margin-right: 50%"</p>').text(data.username + " : " + data.message));
+              }
+              window.scrollTo(0, document.body.scrollHeight);
+            })
+            socket.on('chat message', function (msg) {
+              let name = msg.split(":")
+              console.log(name)
+      
+            });
+      
+      
+            //changing a username
+            btnUsername.click(function () {
+              socket.emit('change_username', {
+                username: username.val()
+              })
+            });
+      
+            //Emit typing
+            message.bind("keypress", () => {
+              socket.emit('typing')
+            })
+      
+            //typing
+            socket.on('typing', (data) => {
+              feedback.html("<p><i>" + data.username + " is typing a message..." + "</i></p>")
+            })
+      
+            socket.on('change_username', function (data) {
+              $('#online_list').empty();
+              for (var user in data) {
+                var user_online = data[user].online
+                if (user_online) {
+                  $('#online_list').append(" 🔵 <li id='online'>" + user + "</li>");
+                }
+                else {
+                  $('#online_list').append(" 🔴<li id='offline'>" + user + "</li>");
+                }
+              }
+            })
+          });
+        </script>
     </body>
 </html>
