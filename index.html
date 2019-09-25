@@ -12,7 +12,7 @@
         crossorigin='anonymous'>
 
     <title>Online Chat</title>
-    <div class="jumbotron" style="display:none" id="head">
+    <div class="jumbotron">
         <center>
             <i class='fab fa-facebook-messenger' style='font-size: 70px;color:royalblue'>
                 <h1 style="color:white">SOCKET.IO CHAT</h1>
@@ -76,8 +76,8 @@ background-repeat:no-repeat;background-size:100%">
 
     <center>
 
-        <div id="intro" class="card-user" style="margin-right:-5%;background-color: cornsilk;width: 500px; border-radius: 10px; border:2px solid black;">           
-            </div>
+        <div id="intro" class="card-user" style="margin-right:-5%;background-color: cornsilk;width: 500px; border-radius: 10px; border:2px solid black;">
+            <br>
             <div id="change_username" class="form-group">
                 <input id="username" type="text" class="form-control" placeholder="username" />
                 <br>
@@ -138,6 +138,7 @@ background-repeat:no-repeat;background-size:100%">
                     alert("You are now active..");
                     $("#home").show();
                     $("#intro").hide();
+
                 });
             });
             //creating message
