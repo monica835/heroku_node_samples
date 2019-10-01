@@ -61,5 +61,7 @@ typings/
 
 # next.js build output
 .next
+
+#heroku
  .DS_Store
-    *.env/
+*.env/
